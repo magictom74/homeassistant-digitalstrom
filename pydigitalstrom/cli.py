@@ -18,7 +18,6 @@ import json
 import logging
 import os
 import sys
-import warnings
 from typing import Any
 
 from . import (
@@ -31,15 +30,6 @@ from . import (
 )
 
 _LOGGER = logging.getLogger("pydigitalstrom.cli")
-
-
-def _silence_urllib3_warnings() -> None:
-    """dSS uses a self-signed cert - mute the noise."""
-    try:
-        from urllib3.exceptions import InsecureRequestWarning
-        warnings.filterwarnings("ignore", category=InsecureRequestWarning)
-    except ImportError:
-        pass
 
 
 def _build_parser() -> argparse.ArgumentParser:
@@ -237,7 +227,6 @@ COMMANDS = {
 
 
 def main(argv: list[str] | None = None) -> int:
-    _silence_urllib3_warnings()
     parser = _build_parser()
     args = parser.parse_args(argv)
 
