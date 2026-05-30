@@ -12,7 +12,7 @@ If you think you've found a security issue in `pydigitalstrom`,
 **please do not open a public GitHub issue**. Instead, report it
 privately via either:
 
-- GitHub's [private security advisory mechanism](https://github.com/magictom74/ha-digitalstrom/security/advisories/new) (preferred)
+- GitHub's [private security advisory mechanism](https://github.com/magictom74/homeassistant-digitalstrom/security/advisories/new) (preferred)
 - Email the maintainer (the email address in `pyproject.toml`)
 
 You can expect:

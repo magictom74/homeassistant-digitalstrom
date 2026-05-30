@@ -24,8 +24,8 @@ you'd rather not share real identifiers.
 ## Development setup
 
 ```bash
-git clone git@github.com:magictom74/ha-digitalstrom.git
-cd ha-digitalstrom
+git clone git@github.com:magictom74/homeassistant-digitalstrom.git
+cd homeassistant-digitalstrom
 
 # Install in editable mode with dev extras
 pip install -e ".[dev,cli]"

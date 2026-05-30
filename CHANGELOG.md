@@ -81,5 +81,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     `addon-id`, `.config` vs `-config` event naming, action-placeholder
     pattern, sequential vs timestamp IDs, etc.).
 
-[Unreleased]: https://github.com/magictom74/ha-digitalstrom/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/magictom74/ha-digitalstrom/releases/tag/v0.1.0
+[Unreleased]: https://github.com/magictom74/homeassistant-digitalstrom/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/magictom74/homeassistant-digitalstrom/releases/tag/v0.1.0

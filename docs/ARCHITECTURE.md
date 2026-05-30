@@ -198,7 +198,7 @@ HA Start
 
 ## Distribution
 
-- **GitHub-Repo:** `ha-integration-digitalstrom` (Mono-Repo)
+- **GitHub-Repo:** `homeassistant-digitalstrom` (Mono-Repo, magictom74/)
 - **HACS:** `hacs.json` im Root, kompatibel als "integration" type
 - **PyPI:** `pydigitalstrom` als separate Library (optional, fuer V1.0+)
 - **HA Brand:** Falls Submission an HA Core: Brand-PR im `home-assistant/brands` Repo

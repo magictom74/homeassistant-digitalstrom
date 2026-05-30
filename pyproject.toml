@@ -42,8 +42,8 @@ dev = [
 pydigitalstrom-cli = "pydigitalstrom.cli:main"
 
 [project.urls]
-Repository = "https://github.com/magictom74/ha-digitalstrom"
-Issues = "https://github.com/magictom74/ha-digitalstrom/issues"
+Repository = "https://github.com/magictom74/homeassistant-digitalstrom"
+Issues = "https://github.com/magictom74/homeassistant-digitalstrom/issues"
 
 [tool.hatch.build.targets.wheel]
 packages = ["pydigitalstrom"]
