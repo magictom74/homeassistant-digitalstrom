@@ -1,0 +1,34 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Add a digitalSTROM dSS",
+        "description": "Enter the dSS hostname/IP and an Application Token generated via the dSS web UI (System -> Access -> Authorized Applications).",
+        "data": {
+          "host": "Host",
+          "port": "Port",
+          "app_token": "Application Token",
+          "verify_ssl": "Verify SSL certificate"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Cannot reach the dSS at that address.",
+      "invalid_auth": "Application token was rejected by the dSS.",
+      "unknown": "Unexpected error."
+    },
+    "abort": {
+      "already_configured": "This dSS is already configured."
+    }
+  },
+  "services": {
+    "call_scene": {
+      "name": "Call scene",
+      "description": "Trigger a dSS scene by zone + group + scene number."
+    },
+    "undo_scene": {
+      "name": "Undo scene",
+      "description": "Undo the last scene call on a zone+group."
+    }
+  }
+}

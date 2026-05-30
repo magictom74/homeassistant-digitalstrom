@@ -1,0 +1,69 @@
+call_scene:
+  name: Call scene
+  description: >-
+    Trigger a dSS scene by zone + group + scene number. Lets you reach
+    presets beyond the ones exposed as scene entities (Wake = 6,
+    Bell1 = 12, Standby = 67, ...).
+  fields:
+    zone_id:
+      name: Zone ID
+      description: Numeric dSS zone ID (0 = apartment-wide).
+      required: true
+      example: 32
+      selector:
+        number:
+          min: 0
+          max: 65535
+    group_id:
+      name: Group ID
+      description: dSS group (1=light, 2=shade, 16+=user groups).
+      required: false
+      example: 1
+      default: 0
+      selector:
+        number:
+          min: 0
+          max: 255
+    scene_id:
+      name: Scene number
+      description: 0-127 (0..4 are presets, see dSS docs for others).
+      required: true
+      example: 5
+      selector:
+        number:
+          min: 0
+          max: 127
+    force:
+      name: Force
+      description: Override local priority (rarely needed).
+      required: false
+      default: false
+      selector:
+        boolean:
+
+undo_scene:
+  name: Undo scene
+  description: Undo the last scene call on a zone+group.
+  fields:
+    zone_id:
+      name: Zone ID
+      required: true
+      selector:
+        number:
+          min: 0
+          max: 65535
+    group_id:
+      name: Group ID
+      required: false
+      default: 0
+      selector:
+        number:
+          min: 0
+          max: 255
+    scene_id:
+      name: Scene number
+      required: true
+      selector:
+        number:
+          min: 0
+          max: 127

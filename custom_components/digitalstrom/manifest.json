@@ -1,0 +1,13 @@
+{
+  "domain": "digitalstrom",
+  "name": "digitalSTROM",
+  "version": "0.1.0",
+  "documentation": "https://github.com/magictom74/homeassistant-digitalstrom",
+  "issue_tracker": "https://github.com/magictom74/homeassistant-digitalstrom/issues",
+  "codeowners": ["@magictom74"],
+  "config_flow": true,
+  "iot_class": "local_push",
+  "integration_type": "hub",
+  "requirements": ["pydigitalstrom @ git+https://github.com/magictom74/homeassistant-digitalstrom.git@v0.2.0"],
+  "dependencies": []
+}
