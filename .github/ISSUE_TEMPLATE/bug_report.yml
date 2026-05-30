@@ -1,0 +1,53 @@
+name: Bug report
+description: Report something that is wrong in pydigitalstrom
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to file a bug! The more concrete you
+        can be the easier it is to track down.
+
+  - type: input
+    id: version
+    attributes:
+      label: pydigitalstrom version
+      placeholder: "0.1.0"
+    validations:
+      required: true
+
+  - type: input
+    id: python_version
+    attributes:
+      label: Python version
+      placeholder: "3.12.3"
+    validations:
+      required: true
+
+  - type: input
+    id: dss_version
+    attributes:
+      label: dSS firmware version (if known)
+      description: "Run `pydigitalstrom-cli raw-get /json/system/version` or grab it from the dSS web UI."
+
+  - type: textarea
+    id: what_happened
+    attributes:
+      label: What happened
+      description: What did you do, what did you expect, what did you actually see?
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproducer
+    attributes:
+      label: Minimal reproducer
+      description: A few lines of code that hit the bug. Strip secrets first.
+      render: python
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs / tracebacks
+      description: Any error messages, stack traces, or `[pydss.*]` log lines.
+      render: text

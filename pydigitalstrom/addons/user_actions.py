@@ -13,8 +13,9 @@ it uses the generic ``highlevelevent`` mechanism with ``actionName=<NAME>``.
 from __future__ import annotations
 
 import logging
+from collections.abc import Mapping
 from datetime import datetime
-from typing import Any, Mapping
+from typing import Any
 
 from ..exceptions import DssNotFoundError
 from ..models import (
@@ -70,7 +71,7 @@ class UserActionsAddon(AddonBase):
         for entry_id in entry_ids:
             try:
                 raw = await self.load_entry_raw(entry_id)
-            except Exception as exc:  # noqa: BLE001
+            except Exception as exc:
                 _LOGGER.debug("[pydss.addons.user_actions] entry %s load failed: %s", entry_id, exc)
                 continue
             action = parse_user_action(entry_id, raw)
@@ -195,7 +196,7 @@ class UserActionsAddon(AddonBase):
                 _LOGGER.info("[pydss.addons.user_actions] removed %s", path)
             except DssNotFoundError:
                 pass
-            except Exception as exc:  # noqa: BLE001
+            except Exception as exc:
                 msg = str(exc).lower()
                 if "could not find" in msg or "not found" in msg:
                     continue

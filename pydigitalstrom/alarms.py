@@ -32,7 +32,7 @@ from collections.abc import AsyncIterator, Iterable
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta, timezone
 from enum import Enum
-from typing import Any, Callable, Protocol
+from typing import Any, Protocol, TypeVar, overload
 
 from .circuits import CircuitMonitor, CircuitReading, CircuitState
 from .client import DssClient
@@ -40,13 +40,14 @@ from .events import (
     DeviceBinaryInputEvent,
     DssEvent,
     EventStream,
-    StateChangeEvent,
     ZoneSensorErrorEvent,
     ZoneSensorValueEvent,
 )
 from .models import SensorType
 
 _LOGGER = logging.getLogger(__name__)
+
+_E = TypeVar("_E", bound="DssEvent")
 
 
 class Severity(str, Enum):
@@ -108,7 +109,15 @@ class AlarmContext:
             return ev
         return None
 
-    def events_since(self, since: datetime, event_type: type[DssEvent] | None = None) -> list[DssEvent]:
+    @overload
+    def events_since(self, since: datetime) -> list[DssEvent]: ...
+    @overload
+    def events_since(self, since: datetime, event_type: type[_E]) -> list[_E]: ...
+    def events_since(
+        self,
+        since: datetime,
+        event_type: type[DssEvent] | None = None,
+    ) -> list[Any]:
         out: list[DssEvent] = []
         for ev in self.recent_events:
             if ev.received_at < since:
@@ -495,7 +504,7 @@ class AlarmEngine:
             try:
                 self._context.now = datetime.now(timezone.utc)
                 self._evaluate_all_rules()
-            except Exception:  # noqa: BLE001
+            except Exception:
                 _LOGGER.exception("[pydss.alarms] tick failed")
             try:
                 await asyncio.wait_for(self._stop.wait(), timeout=self._tick_interval)
@@ -510,7 +519,7 @@ class AlarmEngine:
                     return
         except asyncio.CancelledError:
             return
-        except Exception:  # noqa: BLE001
+        except Exception:
             _LOGGER.exception("[pydss.alarms] circuit loop failed")
 
     async def _event_loop(self) -> None:
@@ -522,7 +531,7 @@ class AlarmEngine:
                         return
         except asyncio.CancelledError:
             return
-        except Exception:  # noqa: BLE001
+        except Exception:
             _LOGGER.exception("[pydss.alarms] event loop failed")
 
     async def _state_loop(self) -> None:
@@ -538,9 +547,9 @@ class AlarmEngine:
                             value = result.get("value")
                             if value is not None:
                                 self._context.user_states[name] = str(value)
-                    except Exception as exc:  # noqa: BLE001
+                    except Exception as exc:
                         _LOGGER.debug("[pydss.alarms] state get %s failed: %s", name, exc)
-            except Exception:  # noqa: BLE001
+            except Exception:
                 _LOGGER.exception("[pydss.alarms] state loop iteration failed")
             try:
                 await asyncio.wait_for(self._stop.wait(), timeout=self._state_poll_interval)
@@ -554,7 +563,7 @@ class AlarmEngine:
         for rule in self._rules:
             try:
                 decisions = list(rule.evaluate(self._context))
-            except Exception:  # noqa: BLE001
+            except Exception:
                 _LOGGER.exception("[pydss.alarms] rule %s evaluate failed", rule.rule_name)
                 continue
 
@@ -567,12 +576,14 @@ class AlarmEngine:
         # (rule may have removed the target).
         stale = [key for key in self._active if key not in seen_keys]
         for key in stale:
-            rule_name, target_id = key
-            rule = next((r for r in self._rules if r.rule_name == rule_name), None)
-            if rule is None:
+            rule_name, _target_id = key
+            stale_rule: AlarmRule | None = next(
+                (r for r in self._rules if r.rule_name == rule_name), None
+            )
+            if stale_rule is None:
                 self._active.pop(key, None)
                 continue
-            self._clear_alarm(rule, key, now, reason="no longer reported")
+            self._clear_alarm(stale_rule, key, now, reason="no longer reported")
 
     def _process_decision(
         self,

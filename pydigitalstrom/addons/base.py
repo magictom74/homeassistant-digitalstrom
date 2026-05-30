@@ -14,7 +14,8 @@ from __future__ import annotations
 
 import json
 import logging
-from typing import Any, Mapping
+from collections.abc import Mapping
+from typing import Any
 
 from ..client import DssClient
 from ..exceptions import DssNotFoundError, DssProtocolError
@@ -178,7 +179,7 @@ class AddonBase:
                     "/json/event/unsubscribe",
                     params={"subscriptionID": sub_id, "name": self.saved_event_name},
                 )
-            except Exception:  # noqa: BLE001
+            except Exception:
                 pass
 
     async def save_entry_raw(self, payload: Mapping[str, Any]) -> None:

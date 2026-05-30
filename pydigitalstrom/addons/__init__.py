@@ -27,8 +27,8 @@ from .user_states import (
 
 __all__ = [
     "AddonBase",
-    "TimedEventsAddon",
     "SceneResponderAddon",
+    "TimedEventsAddon",
     "UserActionsAddon",
     "UserStatesAddon",
     "parse_scene_responder",

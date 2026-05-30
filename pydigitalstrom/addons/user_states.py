@@ -21,7 +21,8 @@ Save protocol verified via DevTools capture 2026-05-30:
 from __future__ import annotations
 
 import logging
-from typing import Any, Mapping
+from collections.abc import Mapping
+from typing import Any
 
 from ..exceptions import DssNotFoundError, DssProtocolError
 from ..models import (
@@ -60,7 +61,7 @@ class UserStatesAddon(AddonBase):
             for state_id in ids:
                 try:
                     state = await self._load_state(cat, state_id)
-                except Exception as exc:  # noqa: BLE001
+                except Exception as exc:
                     _LOGGER.debug(
                         "[pydss.addons.user_states] %s/%s load failed: %s",
                         cat.value, state_id, exc,
@@ -193,7 +194,7 @@ class UserStatesAddon(AddonBase):
         path = f"{self.base_path}/{category.value}"
         try:
             children = await self._walker.get_children(path)
-        except Exception as exc:  # noqa: BLE001
+        except Exception as exc:
             _LOGGER.debug("[pydss.addons.user_states] %s missing: %s", path, exc)
             return []
         return [c.name for c in children if c.is_leaf is False]
@@ -206,7 +207,7 @@ class UserStatesAddon(AddonBase):
         path = f"{self.base_path}/{category.value}/{state_id}"
         try:
             raw = await self._walker.walk(path)
-        except Exception:  # noqa: BLE001
+        except Exception:
             return None
         if not raw:
             return None

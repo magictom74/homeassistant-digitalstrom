@@ -19,8 +19,9 @@ Entry schema (see ``docs/DSS_API_NOTES.md`` section "Addon: system-addon-timed-e
 from __future__ import annotations
 
 import logging
+from collections.abc import Mapping
 from datetime import datetime
-from typing import Any, Mapping
+from typing import Any
 
 from ..exceptions import DssNotFoundError
 from ..models import (
@@ -49,7 +50,7 @@ class TimedEventsAddon(AddonBase):
         for entry_id in entry_ids:
             try:
                 entry = await self.get_entry(entry_id)
-            except Exception as exc:  # noqa: BLE001
+            except Exception as exc:
                 _LOGGER.warning("[pydss.addons.timed_events] entry %s load failed: %s", entry_id, exc)
                 continue
             if entry is not None:
@@ -260,7 +261,7 @@ def _serialize_action_with_placeholder(action: UserActionAction, index: int) -> 
     body["delay"] = action.delay
     body["category"] = action.category
 
-    placeholder = [{k: []} for k in body.keys()]
+    placeholder: list[dict[str, list[Any]]] = [{k: []} for k in body]
     return {str(index): placeholder, **body}
 
 

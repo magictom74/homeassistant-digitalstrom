@@ -12,11 +12,11 @@ from __future__ import annotations
 import asyncio
 import logging
 import random
-from collections.abc import AsyncIterator, Awaitable, Callable, Iterable
+from collections.abc import AsyncIterator, Awaitable, Callable, Iterable, Mapping
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from types import TracebackType
-from typing import Any, Mapping
+from typing import Any
 
 from .client import DssClient
 from .exceptions import DssError, DssSubscriptionError
@@ -476,7 +476,7 @@ class EventStream:
                     "/json/event/unsubscribe",
                     params={"name": name, "subscriptionID": self._subscription_id},
                 )
-            except Exception as exc:  # noqa: BLE001
+            except Exception as exc:
                 _LOGGER.debug("[pydss.events] unsubscribe %s failed: %s", name, exc)
 
     async def stop(self) -> None:

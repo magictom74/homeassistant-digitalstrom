@@ -32,8 +32,9 @@ be edited - this module filters them out of :meth:`list_entries` by default.
 from __future__ import annotations
 
 import logging
+from collections.abc import Mapping
 from datetime import datetime
-from typing import Any, Mapping
+from typing import Any
 
 from ..exceptions import DssNotFoundError, DssProtocolError
 from ..models import (
@@ -68,7 +69,7 @@ class SceneResponderAddon(AddonBase):
                 raw = await self.load_entry_raw(entry_id)
             except DssNotFoundError:
                 continue
-            except Exception as exc:  # noqa: BLE001
+            except Exception as exc:
                 _LOGGER.debug("[pydss.addons.scene_responder] entry %s load failed: %s", entry_id, exc)
                 continue
             entry = parse_scene_responder(entry_id, raw)
@@ -322,7 +323,7 @@ def _serialize_action_with_placeholder(action: UserActionAction, index: int) -> 
     body["delay"] = action.delay
     body["category"] = action.category
 
-    placeholder = [{k: []} for k in body.keys()]
+    placeholder: list[dict[str, list[Any]]] = [{k: []} for k in body]
     return {str(index): placeholder, **body}
 
 

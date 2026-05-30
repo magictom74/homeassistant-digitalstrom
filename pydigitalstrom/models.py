@@ -10,10 +10,11 @@ instance. Lists are stored as tuples to preserve immutability.
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Literal, Mapping
+from typing import Any, Literal
 
 # ---------------------------------------------------------------------------
 # Enums

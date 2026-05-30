@@ -10,9 +10,10 @@ the child's declared type first.
 from __future__ import annotations
 
 import logging
+from collections.abc import Callable
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Callable
+from typing import Any
 
 from .client import DssClient
 
@@ -103,7 +104,9 @@ class PropertyTreeWalker:
 
         result = await self._client.get(endpoint, params={"path": path})
         if isinstance(result, dict):
-            return result.get("value")  # type: ignore[no-any-return]
+            value = result.get("value")
+            if isinstance(value, (str, int, bool)):
+                return value
         return None
 
     async def set_typed(self, path: str, value: str | int | bool) -> None:
@@ -165,7 +168,7 @@ class PropertyTreeWalker:
                     continue
                 try:
                     node[c.name] = await self.get_typed(child_path, c.type)
-                except Exception as exc:  # noqa: BLE001
+                except Exception as exc:
                     _LOGGER.debug("[pydss.property] Leaf %s failed: %s", child_path, exc)
                     node[c.name] = None
             else:

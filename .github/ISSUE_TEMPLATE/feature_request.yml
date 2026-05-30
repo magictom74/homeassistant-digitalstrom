@@ -1,0 +1,22 @@
+name: Feature request
+description: Suggest a new capability for pydigitalstrom
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What's the problem this would solve?
+      description: Try to describe the user need before the proposed solution.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed approach (optional)
+      description: How would you imagine the API or workflow looking?
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered (optional)
