@@ -83,7 +83,7 @@ class ZoneGroupSceneEntity(ZoneEntity, Scene):
         self._group_id = group.group_id
         self._group_name = group.name
         self._scene_id = scene_id
-        group_label = group.name or _group_label(group)
+        group_label = _user_friendly_group_label(group)
         self._attr_unique_id = (
             f"{coordinator.entry_id}_scene_{zone.zone_id}_{group.group_id}_{scene_id}"
         )
@@ -124,3 +124,28 @@ def _group_label(group: Group) -> str:
     if group.is_shade:
         return "Shade"
     return f"Group {group.group_id}"
+
+
+# dSS often labels system groups by their color (yellow=light, grey=shade,
+# blue=climate, cyan=audio, magenta=video, red=security, green=access,
+# black=joker). User-set names should win, but those raw color names are
+# the dSS default and not helpful in HA - swap them out.
+_DSS_COLOR_NAMES: frozenset[str] = frozenset({
+    "yellow", "grey", "gray", "blue", "cyan",
+    "magenta", "red", "green", "black",
+})
+
+
+def _user_friendly_group_label(group: Group) -> str:
+    """Pick the best name for a group.
+
+    Priority:
+      1. Real custom name from the user (e.g. "Living-Lamps") - kept.
+      2. dSS default color name (yellow/grey/...) - mapped to a semantic
+         label based on group_id (Light/Shade/...).
+      3. Empty name - same semantic label.
+    """
+    name = (group.name or "").strip()
+    if name and name.lower() not in _DSS_COLOR_NAMES:
+        return name
+    return _group_label(group)
