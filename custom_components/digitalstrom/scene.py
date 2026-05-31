@@ -54,18 +54,29 @@ async def async_setup_entry(
     for zone in apt.user_zones:
         light = zone.light_group
         shade = zone.shade_group
-        if light is not None:
+        if light is not None and _group_has_devices(light):
             for label, scene_id in _LIGHT_PRESETS:
                 entities.append(
                     ZoneGroupSceneEntity(coordinator, zone, light, label, scene_id)
                 )
-        if shade is not None:
+        if shade is not None and _group_has_devices(shade):
             for label, scene_id in _SHADE_PRESETS:
                 entities.append(
                     ZoneGroupSceneEntity(coordinator, zone, shade, label, scene_id)
                 )
 
     async_add_entities(entities)
+
+
+def _group_has_devices(group: Group) -> bool:
+    """Skip the standard yellow/grey groups when no device is wired to them.
+
+    The dSS reports the system groups (1=light, 2=shade, ...) on every
+    zone even when nothing is assigned. Without this filter, a kitchen
+    zone with only lights would still get a 'Shade Open / Close' pair
+    that does nothing.
+    """
+    return bool(group.device_dsuids) and group.is_present
 
 
 class ZoneGroupSceneEntity(ZoneEntity, Scene):
