@@ -52,6 +52,7 @@ class DeviceHardwareSensor(DeviceEntity, SensorEntity):
     """
 
     _attr_entity_category = EntityCategory.DIAGNOSTIC
+    _attr_entity_registry_enabled_default = False
     _attr_name = "Hardware"
 
     def __init__(self, coordinator: DigitalStromCoordinator, device: Device) -> None:

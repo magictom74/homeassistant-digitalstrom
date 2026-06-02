@@ -23,7 +23,7 @@ from __future__ import annotations
 from typing import Any
 
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.helpers.device_registry import DeviceInfo
+from homeassistant.helpers.device_registry import DeviceEntryType, DeviceInfo
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from pydigitalstrom import Circuit, Device, Zone
@@ -103,6 +103,10 @@ def _device_device_info(
         model=device.hw_info or "dSS Device",
         name=device.name or f"dS {device.display_id}",
         via_device=via,
+        # Mark physical klemmen as service-type so HA's UI treats them
+        # as sub-devices of the dSM rather than as primary "Hub" devices
+        # in the integration-overview list.
+        entry_type=DeviceEntryType.SERVICE,
     )
 
 
